@@ -1,5 +1,10 @@
 const express = require("express");
-const { agregapost, listapost } = require("./consultas");
+const {
+  agregapost,
+  listapost,
+  eliminapost,
+  modificapost,
+} = require("./consultas");
 const cors = require("cors"); // Llamo o requiero cors
 const app = express();
 
@@ -17,5 +22,19 @@ app.post("/posts", async (req, res) => {
 app.get("/posts", async (req, res) => {
   const lospost = await listapost();
   res.json(lospost);
-  console.log(lospost);
+  // console.log(lospost);
+});
+
+app.delete("/posts/:id", async (req, res) => {
+  const { id } = req.params;
+  await eliminapost(id);
+  //res.send("Post Elimimado :", id);
+});
+
+// Realizamos una llamada PUT para traer los valores a modificar y actualizaar los  LIKE
+app.put("/posts/like/:id", async (req, res) => {
+  const { id } = req.params;
+  //const { likes } = req.query;
+  await modificapost(id);
+  res.send("Likes Actualizado");
 });

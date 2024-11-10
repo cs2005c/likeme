@@ -20,7 +20,7 @@ const agregapost = async (titulo, imgSrc, descripcion) => {
 
 const listapost = async () => {
   const result = await pool.query("Select * from post");
-  console.log(result.rows);
+  //console.log(result.rows);
   return result.rows; // Retorna las filas resultantes de la consulta.
 };
 
@@ -31,10 +31,20 @@ const leepostindividual = async (id) => {
   console.log(resul);
 };
 
-const modificapost = async (presupuesto, id) => {
-  const consulta = "UPDATE post  set prespuesto = $1 Where id = $2 ";
-  const values = [presupuesto, id];
+const modificapost = async (id) => {
+  const consulta =
+    "UPDATE post  set likes = COALESCE(likes, 0) + 1 Where id = $1 ";
+  // const values = [likes, id];
+  const values = [id];
   const result = await pool.query(consulta, values);
+};
+
+const eliminapost = async (id) => {
+  const consulta = "DELETE FROM post WHERE id = $1";
+  console.log(id);
+  const values = [id];
+  const result = await pool.query(consulta, values);
+  console.log("Paso Por acá");
 };
 
 // Exporta las ArrowFunction para ser usadas en otros modulos
@@ -43,4 +53,5 @@ module.exports = {
   leepostindividual,
   listapost,
   modificapost,
+  eliminapost,
 };
